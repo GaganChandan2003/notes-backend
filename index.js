@@ -16,7 +16,7 @@ app.get("/",(req,res)=>
 app.use("/user",userController);
 app.use("/notes",notesController)
 
-app.listen(process.env.PORT,async()=>
+app.listen(process.env.PORT || 8080,async()=>
 {
     try{
         await connection;
