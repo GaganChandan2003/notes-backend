@@ -13,7 +13,7 @@ var dd = String(today.getDate()).padStart(2, '0');
 var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
 var yyyy = today.getFullYear();
 
-today = mm + '/' + dd + '/' + yyyy;
+today = dd+ '/' + mm + '/' + yyyy;
     console.log(userId);
     const new_note = new NotesModel({
         title,
@@ -31,6 +31,12 @@ today = mm + '/' + dd + '/' + yyyy;
 notesController.get("/",authentication, async (req, res) => {
     const { userId } = req.body;
     const notes = await NotesModel.find({ userId });
+    res.send(notes);
+})
+
+notesController.get("/:noteId",authentication, async (req, res) => {
+const  {noteId}  = req.params;
+    const notes = await NotesModel.findOne({_id:noteId });
     res.send(notes);
 })
 
