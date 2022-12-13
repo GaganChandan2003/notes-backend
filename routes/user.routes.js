@@ -46,18 +46,18 @@ userController.post("/login", async (req, res) => {
     const { email, password } = req.body;
     const user = await UserModel.findOne({ email });
     if (!user) {
-        return res.send("Invalid Credentials")
+        return res.send("Invalid Credentials").status(404)
     }
     const hash = user.password;
     const userId = user._id
     bcrypt.compare(password, hash, function (err, result) {
-        if(err)
+        if(result) {
+            var token = jwt.sign({ email, userId }, process.env.SECRET);
+            res.status(200).send({ messege: "Login Sucessfull", token: token,username:user.username ,result:result})
+        }
+        else
         {
             return res.status(400).send("Invalid Credentials");
-        }
-        else {
-            var token = jwt.sign({ email, userId }, process.env.SECRET);
-            res.status(200).send({ messege: "Login Sucessfull", token: token,username:user.username })
         }
     });
 })
